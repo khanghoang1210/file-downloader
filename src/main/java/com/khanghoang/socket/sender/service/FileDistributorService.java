@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FileDistributorService {
 
-    public static void distributeFileSmart(File file, List<ClientHandler> handlers, int totalChunks) throws Exception {
+    public static void distributeFile(File file, List<ClientHandler> handlers, int totalChunks) throws Exception {
         if (handlers.isEmpty()) {
             System.out.println("No clients connected.");
             return;

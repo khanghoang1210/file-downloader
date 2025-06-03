@@ -1,5 +1,5 @@
 package com.khanghoang.socket.receiver.solution;
 
-public interface ReceiverMode {
+public interface Receiver {
     public void receive();
 }

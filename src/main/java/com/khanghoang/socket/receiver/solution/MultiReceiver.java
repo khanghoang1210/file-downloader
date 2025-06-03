@@ -2,7 +2,7 @@ package com.khanghoang.socket.receiver.solution;
 
 import com.khanghoang.socket.receiver.network.SocketClient;
 
-public class MultiReceiverMode implements ReceiverMode {
+public class MultiReceiver implements Receiver {
     @Override
     public void receive() {
         int numClients = 10;
