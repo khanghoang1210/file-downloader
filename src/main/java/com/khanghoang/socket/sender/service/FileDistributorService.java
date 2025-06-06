@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FileDistributorService {
 
-    public static void distributeFile(File file, List<ClientHandler> handlers, int totalChunks) throws Exception {
+    public static void distributeFile(File file, List<ClientHandler> handlers, int chunkSize) throws Exception {
         if (handlers.isEmpty()) {
             System.out.println("No clients connected.");
             return;
@@ -21,7 +21,7 @@ public class FileDistributorService {
             fileData = fis.readAllBytes();
         }
 
-        int chunkSize = (int) Math.ceil((double) fileData.length / totalChunks);
+        int totalChunks = (int) Math.ceil((double) fileData.length / chunkSize);
         int handlerCount = handlers.size();
 
         for (int i = 0; i < totalChunks; i++) {

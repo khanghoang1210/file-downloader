@@ -11,8 +11,8 @@ public class SenderApp {
         serverThread.start();
 
         server.waitForClients(10);
-        server.distributeFile(new File("C:\\Users\\Ms.Trang\\Documents\\Progress Test Hoang Khang.docx"), 10);
-        server.distributeFile(new File("C:\\Users\\Ms.Trang\\Documents\\hosts.txt"), 5);
+        server.distributeFile(new File("C:\\Users\\Ms.Trang\\Documents\\Progress Test Hoang Khang.docx"));
+        server.distributeFile(new File("C:\\Users\\Ms.Trang\\Documents\\hosts.txt"));
 
     }
 }

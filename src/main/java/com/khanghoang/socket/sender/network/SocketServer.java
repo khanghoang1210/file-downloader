@@ -14,6 +14,7 @@ public class SocketServer {
     private final int port;
     private final List<ClientHandler> clientHandlers = new CopyOnWriteArrayList<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final int CHUNK_SIZE = 1024;
     private int clientCounter = 0;
 
     public SocketServer(int port) {
@@ -37,9 +38,9 @@ public class SocketServer {
         }
     }
 
-    public void distributeFile(File file, int totalChunks) {
+    public void distributeFile(File file) {
         try {
-            FileDistributorService.distributeFile(file, clientHandlers, totalChunks);
+            FileDistributorService.distributeFile(file, clientHandlers, CHUNK_SIZE);
         } catch (Exception e) {
             e.printStackTrace();
         }
