@@ -4,7 +4,7 @@ import com.khanghoang.socket.receiver.network.SocketClient;
 
 public class MultiReceiver implements Receiver {
     @Override
-    public void receive() {
+    public void run() {
         int numClients = 10;
 
         for (int i = 0; i < numClients; i++) {
