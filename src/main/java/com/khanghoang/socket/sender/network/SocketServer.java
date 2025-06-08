@@ -1,6 +1,7 @@
 package com.khanghoang.socket.sender.network;
 
-import com.khanghoang.socket.sender.service.FileDistributorService;
+import com.khanghoang.socket.config.SenderConfig;
+import com.khanghoang.socket.sender.helper.FileDistributor;
 
 import java.io.File;
 import java.net.ServerSocket;
@@ -14,11 +15,14 @@ public class SocketServer {
     private final int port;
     private final List<ClientHandler> clientHandlers = new CopyOnWriteArrayList<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private static final int CHUNK_SIZE = 1024;
     private int clientCounter = 0;
 
     public SocketServer(int port) {
         this.port = port;
+    }
+
+    public void startAsync() {
+        new Thread(this::start).start();
     }
 
     public void start() {
@@ -40,7 +44,7 @@ public class SocketServer {
 
     public void distributeFile(File file) {
         try {
-            FileDistributorService.distributeFile(file, clientHandlers, CHUNK_SIZE);
+            FileDistributor.distributeFile(file, clientHandlers, SenderConfig.CHUNK_SIZE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,7 +60,6 @@ public class SocketServer {
             System.out.println("Waiting for clients... Currently connected: " + clientCounter);
         }
     }
-
 
     public List<ClientHandler> getClientHandlers() {
         return clientHandlers;

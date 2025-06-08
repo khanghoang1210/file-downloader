@@ -1,10 +1,12 @@
 package com.khanghoang.socket.receiver.network;
 
-import com.khanghoang.socket.receiver.service.FileAssemblerService;
+import com.khanghoang.socket.receiver.helper.FileAssembler;
 import com.khanghoang.socket.shared.Protocol;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
 
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
@@ -20,10 +22,14 @@ public class SocketClient {
     private static final Map<String, Integer> fileExpectedChunks = new ConcurrentHashMap<>();
     // Đường dẫn thư mục đầu ra mặc định
     private static String outputDir = "C:\\Users\\Ms.Trang\\Downloads\\test\\";
+    private static final String tempDir = outputDir + "temp\\";
+
 
     public SocketClient(String host, int port) {
         this.host = host;
         this.port = port;
+        // for default temp dir if not exist
+        new File(tempDir).mkdirs();
     }
 
 
@@ -36,7 +42,7 @@ public class SocketClient {
                 ProtocolChunk chunk = Protocol.decodeChunk(dis);
                 if (chunk == null) break;
 
-                processChunkInMemory(chunk);
+                saveChunkToTempFile(chunk);
 
                 String fileName = chunk.getFileName();
                 if (fileChunkBuffers.get(fileName).size() == fileExpectedChunks.get(fileName)) {
@@ -63,12 +69,27 @@ public class SocketClient {
         System.out.println("Received chunk " + chunkIndex + "/" + totalChunks + " of " + fileName);
     }
 
+    private void saveChunkToTempFile(ProtocolChunk chunk) throws IOException {
+        String fileName = chunk.getFileName();
+        int chunkIndex = chunk.getChunkIndex();
+        int totalChunks = chunk.getTotalChunks();
+
+        fileExpectedChunks.putIfAbsent(fileName, totalChunks);
+
+        File chunkFile = new File(tempDir + fileName + ".part" + chunkIndex);
+        try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
+            fos.write(chunk.getData());
+        }
+
+        System.out.println("Saved chunk " + chunkIndex + "/" + totalChunks + " of " + fileName + " to disk");
+    }
+
     private synchronized void assembleAndSaveFile(String fileName) {
         try {
             Map<Integer, byte[]> buffer = fileChunkBuffers.get(fileName);
             int totalChunks = fileExpectedChunks.get(fileName);
 
-            FileAssemblerService.assembleFile(fileName, totalChunks, buffer, outputDir);
+            FileAssembler.assembleFile(fileName, totalChunks, tempDir, outputDir);
             System.out.println("File assembled at: " + outputDir + fileName);
 
             // Xóa bộ nhớ tạm

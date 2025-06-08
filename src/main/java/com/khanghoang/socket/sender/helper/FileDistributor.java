@@ -1,4 +1,4 @@
-package com.khanghoang.socket.sender.service;
+package com.khanghoang.socket.sender.helper;
 
 import com.khanghoang.socket.sender.network.ClientHandler;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileDistributorService {
+public class FileDistributor {
 
     public static void distributeFile(File file, List<ClientHandler> handlers, int chunkSize) throws Exception {
         if (handlers.isEmpty()) {
