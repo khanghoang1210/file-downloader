@@ -1,5 +1,7 @@
 package com.khanghoang.socket.receiver.helper;
 
+import com.khanghoang.socket.config.ReceiverConfig;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,7 +9,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public class FileAssembler {
-
     public static void assembleFile(String fileName, int totalChunks, String tempDir, String outputDir) throws IOException {
         File dir = new File(outputDir);
         if (!dir.exists()) dir.mkdirs();
@@ -21,13 +22,12 @@ public class FileAssembler {
                 }
 
                 try (FileInputStream fis = new FileInputStream(partFile)) {
-                    byte[] buffer = new byte[4096]; // create buffer to write files to disk
+                    byte[] buffer = new byte[ReceiverConfig.BUFFER_SIZE]; // create buffer to write files to disk
                     int read;
                     while ((read = fis.read(buffer)) != -1) {
                         fos.write(buffer, 0, read);
                     }
                 }
-
                 // remove temp files after assemble
                 if (!partFile.delete()) {
                     System.err.println("Warning: Could not delete temp file " + partFile.getName());
