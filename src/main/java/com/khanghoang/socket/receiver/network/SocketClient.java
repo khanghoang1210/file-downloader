@@ -1,17 +1,12 @@
 package com.khanghoang.socket.receiver.network;
 
-import com.khanghoang.socket.receiver.helper.FileAssembler;
-import com.khanghoang.socket.receiver.solution.ReceiverSession;
+import com.khanghoang.socket.receiver.core.ReceiverSession;
 import com.khanghoang.socket.shared.Protocol;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
 
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class SocketClient {
     private final String host;

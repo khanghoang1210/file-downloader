@@ -1,6 +1,6 @@
 package com.khanghoang.socket.sender.network;
 
-import com.khanghoang.socket.config.SenderConfig;
+import com.khanghoang.socket.config.AppConfig;
 import com.khanghoang.socket.sender.helper.FileDistributor;
 
 import java.io.File;
@@ -44,7 +44,7 @@ public class SocketServer {
 
     public void distributeFile(File file) {
         try {
-            FileDistributor.distributeFile(file, clientHandlers, SenderConfig.CHUNK_SIZE);
+            FileDistributor.distributeFile(file, clientHandlers, AppConfig.CHUNK_SIZE);
         } catch (Exception e) {
             e.printStackTrace();
         }

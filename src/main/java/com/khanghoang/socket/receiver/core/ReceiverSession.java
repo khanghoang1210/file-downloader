@@ -1,4 +1,4 @@
-package com.khanghoang.socket.receiver.solution;
+package com.khanghoang.socket.receiver.core;
 
 import com.khanghoang.socket.receiver.helper.FileAssembler;
 import com.khanghoang.socket.shared.model.ProtocolChunk;

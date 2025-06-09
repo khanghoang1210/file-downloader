@@ -34,6 +34,7 @@ public class ClientHandler implements Runnable {
                 System.out.println("Client #" + clientId + " sent chunk " +
                         chunk.getChunkIndex() + "/" + chunk.getTotalChunks() +
                         " of file " + chunk.getFileName());
+                System.out.println("Client IP: " + clientSocket.getInetAddress());
             }
         } catch (Exception e) {
             System.out.println("Client #" + clientId + " disconnected or error: " + e.getMessage());

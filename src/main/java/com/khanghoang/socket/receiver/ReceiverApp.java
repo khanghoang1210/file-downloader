@@ -1,13 +1,12 @@
 package com.khanghoang.socket.receiver;
 
 
-import com.khanghoang.socket.config.ReceiverConfig;
-import com.khanghoang.socket.receiver.solution.MultiReceiver;
-import com.khanghoang.socket.receiver.solution.Receiver;
+import com.khanghoang.socket.config.AppConfig;
+import com.khanghoang.socket.receiver.core.Receiver;
 
 public class ReceiverApp {
     public static void main(String[] args) {
-        Receiver receiver = new MultiReceiver(ReceiverConfig.NUM_CLIENTS);
+        Receiver receiver = new Receiver(AppConfig.NUM_CLIENTS);
         receiver.run();
     }
 }

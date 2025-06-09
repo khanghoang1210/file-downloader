@@ -37,7 +37,7 @@ public class FileDistributor {
                     chunkData
             );
 
-            // Gán mỗi chunk cho client theo round-robin hoặc chia đều
+            // distribute to each client according round-robin algo
             ClientHandler handler = handlers.get(i % handlerCount);
             handler.enqueueChunk(chunk);
         }
