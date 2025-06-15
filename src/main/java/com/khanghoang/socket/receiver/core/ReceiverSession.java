@@ -1,60 +1,31 @@
 package com.khanghoang.socket.receiver.core;
 
-import com.khanghoang.socket.receiver.helper.FileAssembler;
+import com.khanghoang.socket.shared.interfaces.FileWriter;
+import com.khanghoang.socket.shared.interfaces.ProtocolHandler;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ReceiverSession {
-    private final String outputDir;
-    private final String tempDir;
-    private final Map<String, Integer> expectedChunkCounts = new ConcurrentHashMap<>();
+    private final FileWriter fileWriter;
+    private final ProtocolHandler protocolHandler;
 
-    public ReceiverSession(String outputDir) {
-        this.outputDir = outputDir;
-        this.tempDir = outputDir + "temp\\";
-        new File(tempDir).mkdirs();
+    public ReceiverSession(FileWriter fileWriter, ProtocolHandler protocolHandler) {
+        this.fileWriter = fileWriter;
+        this.protocolHandler = protocolHandler;
     }
 
     public void handleChunk(ProtocolChunk chunk) throws IOException {
-        String fileName = chunk.getFileName();
-        int chunkIndex = chunk.getChunkIndex();
-        int totalChunks = chunk.getTotalChunks();
+        System.out.println("Handling chunk " + chunk.getChunkIndex() + " of " + chunk.getTotalChunks() + " for file " + chunk.getFileName());
+        fileWriter.assembleFile(chunk.getFileName(), chunk.getTotalChunks());
+        fileWriter.writeChunk(chunk.getFileName(), chunk.getChunkIndex(), chunk.getData());
+    }
 
-        expectedChunkCounts.putIfAbsent(fileName, totalChunks);
-        saveChunkToTempFile(chunk);
-
-        // Check if we received all chunks
-        if (isComplete(fileName)) {
-            assembleFile(fileName);
+    public void start() throws IOException {
+        while (true) {
+            ProtocolChunk chunk = protocolHandler.decodeChunk();
+            if (chunk == null) break;
+            System.out.println("Received: " + chunk.getFileName());
+            handleChunk(chunk);
         }
-    }
-
-    private void saveChunkToTempFile(ProtocolChunk chunk) throws IOException {
-        String fileName = chunk.getFileName();
-        int chunkIndex = chunk.getChunkIndex();
-
-        File chunkFile = new File(tempDir + fileName + ".part" + chunkIndex);
-        try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
-            fos.write(chunk.getData());
-        }
-
-        System.out.println("Saved chunk " + chunkIndex + "/" + chunk.getTotalChunks() + " of " + fileName);
-    }
-
-    private boolean isComplete(String fileName) {
-        File dir = new File(tempDir);
-        int expected = expectedChunkCounts.get(fileName);
-        int actual = (int) dir.list((d, name) -> name.startsWith(fileName + ".part")).length;
-        return actual == expected;
-    }
-
-    private void assembleFile(String fileName) throws IOException {
-        FileAssembler.assembleFile(fileName, expectedChunkCounts.get(fileName), tempDir, outputDir);
-        expectedChunkCounts.remove(fileName);
     }
 }

@@ -1,15 +1,17 @@
 package com.khanghoang.socket.sender.network;
 
 import com.khanghoang.socket.config.AppConfig;
-import com.khanghoang.socket.sender.helper.FileDistributor;
-
+import com.khanghoang.socket.sender.impl.SenderFileHandler;
+import com.khanghoang.socket.shared.interfaces.FileReader;
 import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class SocketServer {
     private final int port;
@@ -44,7 +46,13 @@ public class SocketServer {
 
     public void distributeFile(File file) {
         try {
-            FileDistributor.distributeFile(file, clientHandlers, AppConfig.CHUNK_SIZE);
+            List<Consumer<com.khanghoang.socket.shared.model.ProtocolChunk>> consumers = new ArrayList<>();
+            for (ClientHandler handler : clientHandlers) {
+                consumers.add(handler::enqueueChunk);
+            }
+            
+            FileReader fileReader = new SenderFileHandler(AppConfig.OUT_DIR, consumers);
+            fileReader.readFile(file, null); // chunkConsumer is not used as we use ProtocolChunk consumers
         } catch (Exception e) {
             e.printStackTrace();
         }

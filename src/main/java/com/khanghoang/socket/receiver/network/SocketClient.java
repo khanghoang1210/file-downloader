@@ -1,45 +1,36 @@
 package com.khanghoang.socket.receiver.network;
 
 import com.khanghoang.socket.receiver.core.ReceiverSession;
-import com.khanghoang.socket.shared.Protocol;
-import com.khanghoang.socket.shared.model.ProtocolChunk;
-
-import java.io.DataInputStream;
+import com.khanghoang.socket.shared.impl.DefaultProtocolHandler;
+import com.khanghoang.socket.shared.impl.SocketNetworkHandler;
 import java.io.IOException;
-import java.net.Socket;
 
 public class SocketClient {
     private final String host;
     private final int port;
-    private Socket socket;
     private final ReceiverSession session;
+    private final SocketNetworkHandler networkHandler;
+    private final DefaultProtocolHandler protocolHandler;
 
     public SocketClient(String host, int port, ReceiverSession session) {
         this.host = host;
         this.port = port;
         this.session = session;
+        this.networkHandler = new SocketNetworkHandler(host, port);
+        this.protocolHandler = new DefaultProtocolHandler(networkHandler);
     }
 
     public void connect() {
         try {
-            socket = new Socket(host, port);
+            networkHandler.connect();
             System.out.println("Connected to server: " + host + ":" + port);
-
-            try (DataInputStream dis = new DataInputStream(socket.getInputStream())) {
-                while (!socket.isClosed()) {
-                    ProtocolChunk chunk = Protocol.decodeChunk(dis);
-                    if (chunk == null) break;
-                    session.handleChunk(chunk);
-                }
-            }
+            session.start();
         } catch (IOException e) {
             System.err.println("Connection error: " + e.getMessage());
         } finally {
             try {
-                if (socket != null && !socket.isClosed()) {
-                    socket.close();
-                    System.out.println("Connection closed.");
-                }
+                networkHandler.disconnect();
+                System.out.println("Connection closed.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,9 +38,7 @@ public class SocketClient {
     }
 
     public void close() throws IOException {
-        if (socket != null && !socket.isClosed()) {
-            socket.close();
-            System.out.println("Connection closed.");
-        }
+        networkHandler.disconnect();
+        System.out.println("Connection closed.");
     }
 }

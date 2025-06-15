@@ -30,6 +30,8 @@ public class FileAssembler {
                 // remove temp files after assemble
                 if (!partFile.delete()) {
                     System.err.println("Warning: Could not delete temp file " + partFile.getName());
+                } else {
+                    System.out.println("INFO: Deleted temp file " + partFile.getName());
                 }
             }
         }
