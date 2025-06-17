@@ -29,8 +29,6 @@ public class ReceiverFileHandler implements FileWriter {
         lock.lock();
         try {
             ensureReceivedChunkArray(fileName, chunkIndex);
-
-            // Save chunk to temp file
             File chunkFile = new File(tempDir + fileName + ".part" + chunkIndex);
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 fos.write(data);
@@ -92,7 +90,6 @@ public class ReceiverFileHandler implements FileWriter {
                 System.arraycopy(chunks, 0, expanded, 0, chunks.length);
                 receivedChunks.put(fileName, expanded);
             }
-            // else: đủ dài rồi, không làm gì cả
         } finally {
             lock.unlock();
         }
@@ -108,10 +105,10 @@ public class ReceiverFileHandler implements FileWriter {
             return;
         }
 
-        int received = chunks.length;//countReceivedChunks(chunks);
+        int received = countReceivedChunks(chunks);
         System.out.println("Checking completion for " + fileName + ": " + received + "/" + totalChunks + " chunks received");
 
-        if (received >= totalChunks && chunks.length == totalChunks) { //isComplete(chunks, totalChunks)
+        if (received >= totalChunks && isComplete(chunks, totalChunks)) {
             System.out.println("All chunks received for " + fileName + ", assembling...");
             doAssembleFile(fileName, totalChunks);
             cleanupState(fileName);
