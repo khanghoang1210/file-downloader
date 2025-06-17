@@ -1,5 +1,6 @@
 package com.khanghoang.socket.sender.impl;
 
+import com.khanghoang.socket.config.AppConfig;
 import com.khanghoang.socket.shared.interfaces.FileReader;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
 import java.io.File;
@@ -30,7 +31,7 @@ public class SenderFileHandler implements FileReader {
             fileData = fis.readAllBytes();
         }
 
-        int chunkSize = 1024; // TODO: Move to config
+        int chunkSize = AppConfig.CHUNK_SIZE;
         int totalChunks = (int) Math.ceil((double) fileData.length / chunkSize);
         int consumerCount = chunkConsumers.size();
 

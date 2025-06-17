@@ -10,14 +10,12 @@ public class SocketClient {
     private final int port;
     private final ReceiverSession session;
     private final SocketNetworkHandler networkHandler;
-    private final DefaultProtocolHandler protocolHandler;
 
     public SocketClient(String host, int port, ReceiverSession session) {
         this.host = host;
         this.port = port;
         this.session = session;
         this.networkHandler = new SocketNetworkHandler(host, port);
-        this.protocolHandler = new DefaultProtocolHandler(networkHandler);
     }
 
     public void connect() {
