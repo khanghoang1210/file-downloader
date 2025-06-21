@@ -1,12 +1,11 @@
-package com.khanghoang.socket.shared.impl;
+package com.khanghoang.socket.receiver.core;
 
-import com.khanghoang.socket.shared.interfaces.NetworkHandler;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class SocketNetworkHandler implements NetworkHandler {
+public class DefaultSocketClientManager implements SocketClientManager{
     private final String host;
     private final int port;
     private Socket socket;
@@ -15,20 +14,10 @@ public class SocketNetworkHandler implements NetworkHandler {
     private boolean connected = false;
     private static final int MAX_BUFFER_SIZE = 1024 * 1024; // 1MB
 
-    public SocketNetworkHandler(String host, int port) {
+    public DefaultSocketClientManager(String host, int port) {
         this.host = host;
         this.port = port;
     }
-
-    public SocketNetworkHandler(Socket socket) throws IOException {
-        this.socket = socket;
-        this.host = socket.getInetAddress().getHostAddress();
-        this.port = socket.getPort();
-        this.input = new DataInputStream(socket.getInputStream());
-        this.output = new DataOutputStream(socket.getOutputStream());
-        this.connected = true;
-    }
-
     @Override
     public void connect() throws IOException {
         if (connected) {
@@ -55,21 +44,6 @@ public class SocketNetworkHandler implements NetworkHandler {
     }
 
     @Override
-    public void send(byte[] data) throws IOException {
-        if (!connected) {
-            throw new IllegalStateException("Not connected");
-        }
-        try {
-            output.writeInt(data.length);
-            output.write(data);
-            output.flush();
-        } catch (IOException e) {
-            connected = false;
-            throw e;
-        }
-    }
-
-    @Override
     public byte[] receive() throws IOException {
         if (!connected) {
             throw new IllegalStateException("Not connected");
@@ -87,9 +61,4 @@ public class SocketNetworkHandler implements NetworkHandler {
             throw e;
         }
     }
-
-    @Override
-    public boolean isConnected() {
-        return connected && socket != null && !socket.isClosed();
-    }
-} 
+}
