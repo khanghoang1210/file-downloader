@@ -22,16 +22,19 @@ public class Main {
 
         // ====== Coordinator ======
         int expectedClients = AppConfig.EXPECTED_CLIENTS;
-        FileTransferCoordinator coordinator = new FileTransferCoordinator(
-                clientManager,
-                fileDistributor,
-                fileManager,
-                expectedClients
-        );
+
 
         // ====== Run File Transfer ======
         for (String path : AppConfig.FILES) {
-            coordinator.send(path);
+            new Thread(()->{
+                FileTransferCoordinator coordinator = new FileTransferCoordinator(
+                        clientManager,
+                        fileDistributor,
+                        fileManager,
+                        expectedClients
+                );
+                coordinator.sendAsync(path);
+            }).start();
         }
 
 

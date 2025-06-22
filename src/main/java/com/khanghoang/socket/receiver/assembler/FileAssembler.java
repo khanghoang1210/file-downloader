@@ -1,17 +1,22 @@
 package com.khanghoang.socket.receiver.assembler;
 
+import com.khanghoang.socket.config.AppConfig;
 import com.khanghoang.socket.shared.interfaces.FileManager;
 import com.khanghoang.socket.shared.model.ProtocolChunk;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class FileAssembler {
     private final String outputDir;
     private final String tempDir;
     private final FileManager fileManager;
+    private final Set<String> mergedFiles = ConcurrentHashMap.newKeySet();
 
     public FileAssembler(FileManager fileManager, String outputDir) {
         this.fileManager = fileManager;
@@ -21,7 +26,7 @@ public class FileAssembler {
         new File(tempDir).mkdirs(); // ensure folder exists
     }
 
-    public void storeChunk(ProtocolChunk chunk) throws IOException {
+    public synchronized void storeChunk(ProtocolChunk chunk) throws IOException {
         String fileName = chunk.getFileName();
         int chunkIndex = chunk.getChunkIndex();
         byte[] data = chunk.getData();
@@ -32,8 +37,12 @@ public class FileAssembler {
         System.out.println("Stored chunk " + chunkIndex + " of " + fileName);
 
         // check if all chunks exist
-        if (isComplete(fileName, chunk.getTotalChunks())) {
-            mergeChunks(fileName, chunk.getTotalChunks());
+        if (!mergedFiles.contains(fileName) && isComplete(fileName, chunk.getTotalChunks())) {
+            synchronized (mergedFiles) {
+                if (mergedFiles.add(fileName)) {
+                    mergeChunks(fileName, chunk.getTotalChunks());
+                }
+            }
         }
     }
 
@@ -47,12 +56,19 @@ public class FileAssembler {
 
     private void mergeChunks(String fileName, int totalChunks) throws IOException {
         String outputPath = outputDir + fileName;
-        try (FileOutputStream out = new FileOutputStream(outputPath)) {
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputPath))) {
+            byte[] buffer = new byte[AppConfig.BUFFER_SIZE]; // 8KB buffer
+
             for (int i = 0; i < totalChunks; i++) {
                 String chunkPath = tempDir + "/" + fileName + "." + i + ".chunk";
-                byte[] chunkData = fileManager.read(chunkPath);
-                out.write(chunkData);
+                try (var in = fileManager.readStream(chunkPath)) {
+                    int bytesRead;
+                    while ((bytesRead = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+                }
             }
+            out.flush();
         }
 
         System.out.println("Merged all chunks into file: " + outputPath);

@@ -19,9 +19,10 @@ public class Main {
                     FileAssembler assembler = new FileAssembler(new DefaultFileManager(), AppConfig.OUT_DIR);
                     ReceiverService receiver = new ReceiverService(socketClientManager, assembler);
 
-                    receiver.handleChunk();
+                    while (true) {
+                        receiver.handleChunk();
+                    }
 
-                    socketClientManager.disconnect();
                 } catch (Exception e) {
                     System.err.println("Client thread error: " + e.getMessage());
                     e.printStackTrace();

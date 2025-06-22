@@ -32,11 +32,13 @@ public class FileTransferCoordinator {
         clientManager.subscribe(this);
     }
 
-    public void send(String filePath) {
-        this.filePath = filePath;
-        this.fileToSend = fileManager.read(filePath);
-        this.waitingToSend = true;
-        tryDistribute();
+    public void sendAsync(String filePath) {
+        new Thread(()->{
+            this.filePath = filePath;
+            this.fileToSend = fileManager.read(filePath);
+            this.waitingToSend = true;
+            tryDistribute();
+        }).start();
     }
 
     public void onClientConnected() {
