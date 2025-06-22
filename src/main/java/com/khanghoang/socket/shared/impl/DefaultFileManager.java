@@ -2,7 +2,10 @@ package com.khanghoang.socket.shared.impl;
 
 import com.khanghoang.socket.shared.interfaces.FileManager;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -36,5 +39,10 @@ public class DefaultFileManager implements FileManager {
             System.err.println("Failed to delete file: " + filePath);
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public InputStream readStream(String path) throws IOException {
+        return new BufferedInputStream(new FileInputStream(path));
     }
 }
