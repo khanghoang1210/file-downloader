@@ -1,4 +1,4 @@
-package com.khanghoang.socket.config;
+package com.khanghoang.filedownloader.config;
 
 import java.util.List;
 

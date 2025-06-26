@@ -1,6 +1,6 @@
-package com.khanghoang.socket.sender.core;
+package com.khanghoang.filedownloader.sender.core;
 
-import com.khanghoang.socket.sender.coordinator.FileTransferCoordinator;
+import com.khanghoang.filedownloader.sender.coordinator.FileTransferCoordinator;
 
 import java.net.Socket;
 import java.util.List;

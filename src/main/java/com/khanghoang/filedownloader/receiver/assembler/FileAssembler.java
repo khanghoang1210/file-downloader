@@ -1,8 +1,8 @@
-package com.khanghoang.socket.receiver.assembler;
+package com.khanghoang.filedownloader.receiver.assembler;
 
-import com.khanghoang.socket.config.AppConfig;
-import com.khanghoang.socket.shared.interfaces.FileManager;
-import com.khanghoang.socket.shared.model.ProtocolChunk;
+import com.khanghoang.filedownloader.config.AppConfig;
+import com.khanghoang.filedownloader.shared.interfaces.FileManager;
+import com.khanghoang.filedownloader.shared.model.ProtocolChunk;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

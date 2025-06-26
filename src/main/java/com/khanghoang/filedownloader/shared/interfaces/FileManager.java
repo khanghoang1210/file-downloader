@@ -1,4 +1,4 @@
-package com.khanghoang.socket.shared.interfaces;
+package com.khanghoang.filedownloader.shared.interfaces;
 
 import java.io.IOException;
 import java.io.InputStream;

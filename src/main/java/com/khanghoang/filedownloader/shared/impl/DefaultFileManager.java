@@ -1,6 +1,6 @@
-package com.khanghoang.socket.shared.impl;
+package com.khanghoang.filedownloader.shared.impl;
 
-import com.khanghoang.socket.shared.interfaces.FileManager;
+import com.khanghoang.filedownloader.shared.interfaces.FileManager;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

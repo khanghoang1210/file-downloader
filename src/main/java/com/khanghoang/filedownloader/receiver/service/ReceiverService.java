@@ -1,8 +1,8 @@
-package com.khanghoang.socket.receiver.service;
+package com.khanghoang.filedownloader.receiver.service;
 
-import com.khanghoang.socket.receiver.assembler.FileAssembler;
-import com.khanghoang.socket.receiver.core.SocketClientManager;
-import com.khanghoang.socket.shared.model.ProtocolChunk;
+import com.khanghoang.filedownloader.receiver.assembler.FileAssembler;
+import com.khanghoang.filedownloader.receiver.core.SocketClientManager;
+import com.khanghoang.filedownloader.shared.model.ProtocolChunk;
 
 import java.io.IOException;
 

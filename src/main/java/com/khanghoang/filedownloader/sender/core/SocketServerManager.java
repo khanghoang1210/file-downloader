@@ -1,4 +1,4 @@
-package com.khanghoang.socket.sender.core;
+package com.khanghoang.filedownloader.sender.core;
 
 import java.net.Socket;
 

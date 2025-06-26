@@ -1,4 +1,4 @@
-package com.khanghoang.socket.shared.model;
+package com.khanghoang.filedownloader.shared.model;
 
 
 import java.nio.ByteBuffer;

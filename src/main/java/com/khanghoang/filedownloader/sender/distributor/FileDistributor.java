@@ -1,7 +1,7 @@
-package com.khanghoang.socket.sender.distributor;
+package com.khanghoang.filedownloader.sender.distributor;
 
-import com.khanghoang.socket.sender.core.SocketServerManager;
-import com.khanghoang.socket.shared.model.ProtocolChunk;
+import com.khanghoang.filedownloader.sender.core.SocketServerManager;
+import com.khanghoang.filedownloader.shared.model.ProtocolChunk;
 
 import java.net.Socket;
 import java.util.Arrays;

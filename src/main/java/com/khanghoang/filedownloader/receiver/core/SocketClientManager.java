@@ -1,4 +1,4 @@
-package com.khanghoang.socket.receiver.core;
+package com.khanghoang.filedownloader.receiver.core;
 
 import java.io.IOException;
 

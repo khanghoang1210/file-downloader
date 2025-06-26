@@ -1,13 +1,11 @@
-package com.khanghoang.socket.sender;
+package com.khanghoang.filedownloader.sender;
 
-import com.khanghoang.socket.config.AppConfig;
-import com.khanghoang.socket.sender.coordinator.FileTransferCoordinator;
-import com.khanghoang.socket.sender.core.*;
-import com.khanghoang.socket.sender.distributor.FileDistributor;
-import com.khanghoang.socket.shared.impl.DefaultFileManager;
-import com.khanghoang.socket.shared.interfaces.FileManager;
-
-import java.io.File;
+import com.khanghoang.filedownloader.config.AppConfig;
+import com.khanghoang.filedownloader.sender.coordinator.FileTransferCoordinator;
+import com.khanghoang.filedownloader.sender.core.*;
+import com.khanghoang.filedownloader.sender.distributor.FileDistributor;
+import com.khanghoang.filedownloader.shared.impl.DefaultFileManager;
+import com.khanghoang.filedownloader.shared.interfaces.FileManager;
 
 public class Main {
     public static void main(String[] args) {

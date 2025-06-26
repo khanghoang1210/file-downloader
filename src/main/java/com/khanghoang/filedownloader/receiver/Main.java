@@ -1,11 +1,11 @@
-package com.khanghoang.socket.receiver;
+package com.khanghoang.filedownloader.receiver;
 
-import com.khanghoang.socket.config.AppConfig;
-import com.khanghoang.socket.receiver.assembler.FileAssembler;
-import com.khanghoang.socket.receiver.core.DefaultSocketClientManager;
-import com.khanghoang.socket.receiver.core.SocketClientManager;
-import com.khanghoang.socket.receiver.service.ReceiverService;
-import com.khanghoang.socket.shared.impl.DefaultFileManager;
+import com.khanghoang.filedownloader.config.AppConfig;
+import com.khanghoang.filedownloader.receiver.assembler.FileAssembler;
+import com.khanghoang.filedownloader.receiver.core.DefaultSocketClientManager;
+import com.khanghoang.filedownloader.receiver.core.SocketClientManager;
+import com.khanghoang.filedownloader.receiver.service.ReceiverService;
+import com.khanghoang.filedownloader.shared.impl.DefaultFileManager;
 
 public class Main {
     public static void main(String[] args) {
